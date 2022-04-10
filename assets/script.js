@@ -1,5 +1,8 @@
 tasks = [];
 
+var Today = (moment().format("MMMM D, YYYY"))
+$("#currentDay").text(Today);
+
 //load tasks
 var loadTasks = function(){
     tasks = JSON.parse(localStorage.getItem("tasks"))
@@ -18,7 +21,20 @@ var displayTasks = function(){
 })
 }
 
-
+//color code hours bins
+var hourAudit =function(){
+    var Hour = moment().hour() 
+    for(var i=8; i<18; i++){
+        var taskSection = $("#task-"+i)  
+        if(Hour>i){
+            $(taskSection).addClass("past");
+        } else if (Hour === i){
+            $(taskSection).addClass("present");
+        }else{
+            $(taskSection).addClass("future")
+        }
+    }
+}
 
 //Task update with click
 $(".taskBin").on("click", "p", function(){
@@ -48,6 +64,9 @@ $(".saveBtn").on("click", function(){
 });
 
   
+setInterval(function(){
+hourAudit();},1000*60*60);
 
 
 loadTasks();
+hourAudit();
